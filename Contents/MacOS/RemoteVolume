@@ -41,8 +41,12 @@ fi
 if [ ! -d $local_folder ]; then
 	mkdir $local_folder
 else
-	sendNotification "$notification_title" "$notification_nothing2do"
-	exit 0
+	rmdir $local_folder
+	if $? -eq 1; then
+		sendNotification "$notification_title" "$notification_nothing2do"
+		exit 0
+	fi
+	mkdir $local_folder
 fi
 
 if [ $? -eq 0 ]; then
