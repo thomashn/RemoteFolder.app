@@ -1,5 +1,5 @@
 #!/bin/bash
-config_file=~/Applications/RemoteVolume/Contents/MacOS/config
+config_file=~/Applications/RemoteVolume.app/Contents/MacOS/config
 
 checkVariable() 
 {
@@ -21,8 +21,8 @@ sendNotification()
 	osascript -e 'display notification "'"$2"'" with title "'"$1"'"'	
 }
 
-if [ -f $config_file ]; then
-	. $config_file
+if [ -f "$config_file" ]; then
+	. "$config_file"
 	checkVariable "$id_file" "id_file"
 	checkVariable "$volume_name" "volume_name"
 	checkVariable "$user" "user"
@@ -32,6 +32,7 @@ if [ -f $config_file ]; then
 	checkVariable "$notification_title" "notification_title"
 	checkVariable "$notification_success" "notification_success"
 	checkVariable "$notification_failure" "notification_failure"
+	checkVariable "$notification_nothing2do" "notification_nothing2do"
 else
 	echo "Configuration file missing!"
 	exit 1
@@ -39,6 +40,9 @@ fi
 
 if [ ! -d $local_folder ]; then
 	mkdir $local_folder
+else
+	sendNotification "$notification_title" "$notification_nothing2do"
+	exit 0
 fi
 
 if [ $? -eq 0 ]; then
