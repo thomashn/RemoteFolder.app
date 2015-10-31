@@ -51,4 +51,5 @@ if [ $? -eq 0 ]; then
 		sendNotification "$notification_title" "$notification_success"
 	else
 		sendNotification "$notification_title" "$notification_failure"
+	fi
 fi
