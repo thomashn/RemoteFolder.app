@@ -1,0 +1,50 @@
+#!/bin/bash
+config_file=~/Applications/RemoteDisk/Contents/MacOS/config
+
+checkVariable() 
+{
+	if [ -z "$1" ]; then
+		if [ $# -eq 2 ]; then
+			echo "The variable $2 is not set!"
+			return 1
+		else
+			echo "Variable not set!"
+			return 1
+		fi
+	else
+		return 0
+	fi
+}
+
+sendNotification()
+{
+	osascript -e 'display notification "'"$2"'" with title "'"$1"'"'	
+}
+
+if [ -f $config_file ]; then
+	. $config_file
+	checkVariable "$id_file" "id_file"
+	checkVariable "$volume_name" "volume_name"
+	checkVariable "$user" "user"
+	checkVariable "$domain" "domain"
+	checkVariable "$server_folder" "server_folder"
+	checkVariable "$local_folder" "local_folder"
+	checkVariable "$notification_title" "notification_title"
+	checkVariable "$notification_success" "notification_success"
+	checkVariable "$notification_failure" "notification_failure"
+else
+	echo "Configuration file missing!"
+	exit 1
+fi
+
+if [ ! -d $local_folder ]; then
+	mkdir $local_folder
+fi
+
+if [ $? -eq 0 ]; then
+	/usr/local/bin/sshfs -C -o IdentityFile=$id_file -o allow_other -o local -o volname=${volume_name} ${user}@${domain}:${server_folder} ${local_folder}
+	if [ $? -eq 0 ]; then
+		sendNotification "$notification_title" "$notification_success"
+	else
+		sendNotification "$notification_title" "$notification_failure"
+fi
