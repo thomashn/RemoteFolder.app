@@ -1,5 +1,5 @@
 #!/bin/bash
-config_file=~/Applications/RemoteFolder/Contents/MacOS/config
+config_file=~/Applications/RemoteVolume/Contents/MacOS/config
 
 checkVariable() 
 {
