@@ -50,7 +50,7 @@ else
 fi
 
 if [ $? -eq 0 ]; then
-	/usr/local/bin/sshfs -C -o IdentityFile=$id_file -o allow_other -o local -o volname=${volume_name} ${user}@${domain}:${server_folder} ${local_folder}
+	/usr/local/bin/sshfs -C -o IdentityFile=$id_file -o reconnect -o allow_other -o local -o volname=${volume_name} ${user}@${domain}:${server_folder} ${local_folder}
 	if [ $? -eq 0 ]; then
 		sendNotification "$notification_title" "$notification_success"
 	else
